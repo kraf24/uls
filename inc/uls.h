@@ -1,4 +1,4 @@
-#include "libmx.h"
+#include "../libmx/inc/libmx.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -20,11 +20,15 @@
 #include <time.h>
 #include <ctype.h>
 
+#define SORT_MODE 1
+
 #define MODE_NORMAL 1
 #define MODE_INCLUDE_HIDEN 2
+#define MODE_INCLUDE_NOHIDEN 3
 
 #define PRINT_MODE_NORMAL 1
 #define PRINT_MODE_LONG 2
+#define PRINT_MEM 3
 
 #define TIME_LENGTH 12
 #define TYPE_FILE 8
@@ -33,6 +37,8 @@
 #define DOUBLE_SPACE "  "
 #define SINGLE_SPACE " "
 #define CURRENT_DIR "./"
+
+#define MAX_MEMORY 5
 
 typedef struct dirent t_dirent;
 typedef struct stat t_stat;
@@ -59,6 +65,9 @@ typedef struct {
 typedef struct {
     bool l;
     bool a;
+    bool h;
+    bool A;
+    bool S; 
 } t_flags;
 
 void mx_strmode(mode_t mode, char *buf);
@@ -87,6 +96,8 @@ char mx_get_restr(int mode);
 
 int get_read_mode(t_flags flags);
 
+int get_sort_mode(t_flags flags);
+
 int get_print_mode(t_flags flags);
 
 void mx_print_results(t_save_stat *sv_stat, int file_count, int block_sum, int print_mode);
@@ -111,3 +122,10 @@ t_multi_sv_stat *mx_sort_in_multi(t_multi_sv_stat *multi_sv_stat, int dir_count)
 
 t_multi_sv_stat *init_multi_save_stat(int dir_count);
 
+void mx_print_mem_format(long long int used_mem);
+
+char **mx_sort_strarr(char **str_arr, int size);
+
+int get_sv_stat_index(char *name, t_save_stat *sv_stat, int file_count);
+
+int get_multi_stat_index(char *name, t_multi_sv_stat *multi_sv_stat, int dir_count);
